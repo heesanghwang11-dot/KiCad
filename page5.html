@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Plans | KiCad Pro, VIP &amp; Official</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #0b1120;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    h1 { font-size: 2.3rem; margin-bottom: 0.5rem; text-align: center; }
+    .subtitle { color: #94a3b8; margin-bottom: 3rem; text-align: center; }
+
+    .plans-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    .plan-card {
+      background: #1e293b;
+      border-radius: 18px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .plan-card.original {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.28);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, #1e293b 100%);
+    }
+
+    .plan-card.pro {
+      border: 2px solid #a855f7;
+      box-shadow: 0 0 28px rgba(168, 85, 247, 0.45);
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.16) 0%, #1e293b 100%);
+    }
+
+    .plan-card.official {
+      border: 2.5px solid #fde047;
+      box-shadow: 0 0 42px rgba(250, 204, 21, 0.65), 0 0 15px rgba(253, 224, 71, 0.45);
+      background: linear-gradient(180deg, rgba(250, 204, 21, 0.22) 0%, #1e293b 100%);
+    }
+
+    .badge {
+      position: absolute;
+      top: -13px;
+      right: 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .badge-pro { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+    .badge-official { background: linear-gradient(135deg, #facc15, #f97316); color: #0f172a; }
+
+    .plan-title { font-size: 1.5rem; font-weight: 700; }
+    .plan-price { font-size: 2.6rem; font-weight: 800; margin: 0.8rem 0 1.2rem; }
+    .plan-price span { font-size: 1rem; font-weight: 400; color: #94a3b8; }
+
+    .buy-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-original { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; }
+    .btn-pro { background: linear-gradient(135deg, #7c3aed, #ec4899); color: #fff; }
+    .btn-official { background: linear-gradient(135deg, #fde047, #f59e0b); color: #0f172a; }
+
+    .benefits-box { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+    .benefits-box h4 { font-size: 0.9rem; color: #94a3b8; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .benefits-list { list-style: none; }
+    .benefits-list li { margin-bottom: 0.65rem; font-size: 0.95rem; color: #e2e8f0; }
+
+    /* Pure CSS Popup System (No JavaScript Needed) */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 9999;
+    }
+
+    .popup-overlay:target {
+      display: flex;
+    }
+
+    .popup-box {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .popup-box h3 { font-size: 1.35rem; margin-bottom: 0.6rem; }
+    .popup-box p { color: #94a3b8; margin-bottom: 1.5rem; }
+
+    .popup-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .p-btn {
+      flex: 1;
+      display: inline-block;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .btn-yes { background: #22c55e; color: #fff; }
+    .btn-no { background: #ef4444; color: #fff; }
+    .btn-done { background: #6366f1; color: #fff; width: 100%; }
+    .btn-close { background: #334155; color: #fff; width: 100%; }
+
+    .name-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Choose Your Support Tier</h1>
+  <p class="subtitle">Select a monthly plan below to support.</p>
+
+  <div class="plans-container">
+    <!-- 1. KICAD PRO -->
+    <div class="plan-card original">
+      <div>
+        <div class="plan-title">KiCad Pro</div>
+        <div class="plan-price">$20 <span>/ month</span></div>
+        <a href="#confirm-pro" class="buy-btn btn-original">Click to Buy</a>
+        <div class="benefits-box">
+          <h4>Benefits</h4>
+          <ul class="benefits-list">
+            <li>✓ Official Supporter Title</li>
+            <li>✓ 5% Discount for Device</li>
+            <li>✓ Early previews of new posts &amp; performances</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. KICAD VIP -->
+    <div class="plan-card pro">
+      <div class="badge badge-pro">KiCad VIP</div>
+      <div>
+        <div class="plan-title">KiCad VIP</div>
+        <div class="plan-price">$45 <span>/ month</span></div>
+        <a href="#confirm-vip" class="buy-btn btn-pro">Click to Buy</a>
+        <div class="benefits-box">
+          <h4>Benefits</h4>
+          <ul class="benefits-list">
+            <li>✓ All KiCad Pro tier benefits</li>
+            <li>✓ extra 10% discount each month</li>
+			 <li>✓ VIP badge &amp; Title</li>
+            <li>✓ High-resolution for download</li>
+			<li>✓ Custom personalized request every month</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. OFFICIAL -->
+    <div class="plan-card official">
+      <div class="badge badge-official">Official VIP</div>
+      <div>
+        <div class="plan-title" style="color: #fde047;">Official</div>
+        <div class="plan-price">$60 <span>/ month</span></div>
+        <a href="#confirm-official" class="buy-btn btn-official">Click to Buy</a>
+        <div class="benefits-box">
+          <h4>Benefits</h4>
+          <ul class="benefits-list">
+            <li>★ All VIP &amp; KiCad Pro tier benefits</li>
+            <li>★ extra 15% discount each month</li>
+			<li>★ Direct 1v1 VIP messaging access</li>
+            <li>★ Top Official sponsor credit on all releases</li>
+            <li>★ Exclusive source files &amp; full archive</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: CONFIRMATION POPUPS -->
+  <div id="confirm-pro" class="popup-overlay">
+    <div class="popup-box">
+      <h3>Are You Sure to Buy This?</h3>
+      <p>KiCad Pro ($20 / month)</p>
+      <div class="popup-actions">
+        <a href="#enter-name" class="p-btn btn-yes">Yes</a>
+        <a href="#close" class="p-btn btn-no">No</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-vip" class="popup-overlay">
+    <div class="popup-box">
+      <h3>Are You Sure to Buy This?</h3>
+      <p>KiCad VIP ($45 / month)</p>
+      <div class="popup-actions">
+        <a href="#enter-name" class="p-btn btn-yes">Yes</a>
+        <a href="#close" class="p-btn btn-no">No</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-official" class="popup-overlay">
+    <div class="popup-box">
+      <h3>Are You Sure to Buy This?</h3>
+      <p>Official ($60 / month)</p>
+      <div class="popup-actions">
+        <a href="#enter-name" class="p-btn btn-yes">Yes</a>
+        <a href="#close" class="p-btn btn-no">No</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: ENTER NAME POPUP -->
+  <div id="enter-name" class="popup-overlay">
+    <div class="popup-box">
+      <h3>Enter Your Name</h3>
+      <p>Please type in your name to complete your support.</p>
+      <input type="text" class="name-input" placeholder="Your name..." />
+      <a href="#purchase-done" class="p-btn btn-done">Done</a>
+    </div>
+  </div>
+
+  <!-- STEP 3: SUCCESS POPUP -->
+  <div id="purchase-done" class="popup-overlay">
+    <div class="popup-box">
+      <h3 style="color: #4ade80;">succesfully perchase!</h3>
+      <p>Thank you for your support!</p>
+      <a href="#close" class="p-btn btn-close">Close</a>
+    </div>
+  </div>
+
+</body>
+</html>
